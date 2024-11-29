@@ -3,7 +3,7 @@ import { Button, Container, Typography, Box, TextField, Grid } from '@mui/materi
 
 export const Income = () => {
   const [income, setIncome] = useState({ amount: '', description: '' });
-  const [totalIncome, setTotalIncome] = useState(0); // Track total income
+  const [totalIncome, setTotalIncome] = useState(0); 
 
   const handleIncomeChange = (e) => {
     setIncome({ ...income, [e.target.name]: e.target.value });
@@ -11,7 +11,6 @@ export const Income = () => {
 
   const handleIncomeSubmit = (e) => {
     e.preventDefault();
-    // Convert amount to number and add to total income
     const amount = parseFloat(income.amount);
     if (!isNaN(amount)) {
       setTotalIncome((prevTotal) => prevTotal + amount);
@@ -66,7 +65,6 @@ export const Income = () => {
           Добавьте ваш доход и просмотрите общую сумму.
         </Typography>
 
-        {/* Income Form */}
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Box sx={{ padding: 3, border: '1px solid #ddd', borderRadius: 2 }}>
@@ -82,7 +80,7 @@ export const Income = () => {
                   fullWidth
                   required
                   sx={{ marginBottom: 2 }}
-                  type="number" // To ensure the input is a number
+                  type="number" 
                 />
                 <TextField
                   label="Описание"
@@ -101,7 +99,6 @@ export const Income = () => {
           </Grid>
         </Grid>
 
-        {/* Total Income Statistic */}
         <Box sx={{ marginTop: 4, width: '100%' }}>
           <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>
             Общая сумма доходов
