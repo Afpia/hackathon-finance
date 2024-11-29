@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(category::class)->constrained();
             $table->float('incomeORexpense');
+            $table->string('description');
             $table->enum('type', ['income', 'expence']);
             $table->timestamps();
         });
