@@ -43,6 +43,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     public function IncomeOrexpense(){
-        return $this->hasMany(Income_expense::class);
+        return $this->hasMany(Finance::class);
     }
 }
