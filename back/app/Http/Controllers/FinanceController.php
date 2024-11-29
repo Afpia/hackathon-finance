@@ -31,9 +31,10 @@ class FinanceController extends Controller
             'user_id' => Auth::id(),
             'category_id' => $request->category_id,
             'incomeORexpense' => $request->incomeORexpense,
+            'type' => $request->type,
             'description' => $request->description,
+            
         ]);
-
     }
     public function update(Request $request, $id){
         $this->financeService->update(

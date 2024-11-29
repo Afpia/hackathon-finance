@@ -34,6 +34,5 @@ Route::post('/finance', [FinanceController::class, 'store']);
 Route::put('/finance/{id}', [FinanceController::class, 'update']);
 Route::delete('/finance/{id}', [FinanceController::class, 'destroy']);
 
-Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
-Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
-
+//Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
+//Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
