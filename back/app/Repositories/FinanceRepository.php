@@ -6,11 +6,10 @@ use App\Models\Finance;
 
 class FinanceRepository extends BaseRepository
 {
-   protected $model;
+    protected $model;
 
-   public function __construct(Finance $finans)
-   {
-       $this->model = $finans;
-   }
+    public function __construct(Finance $finans)
+    {
+        $this->model = $finans;
+    }
 }
-

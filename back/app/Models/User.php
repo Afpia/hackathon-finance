@@ -42,7 +42,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function IncomeOrexpense(){
+
+    public function IncomeOrexpense()
+    {
         return $this->hasMany(Finance::class);
     }
 }

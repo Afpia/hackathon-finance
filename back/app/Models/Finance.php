@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Finance extends Model
 {
     use HasFactory;
-    public function incomeORexpense(){
-       return $this->hasMany(Category::class);
+
+    public function incomeORexpense()
+    {
+        return $this->hasMany(Category::class);
     }
 }
