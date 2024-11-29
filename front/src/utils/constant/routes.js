@@ -2,6 +2,6 @@ export const ROUTES = {
 	MAIN: '/',
 	LOGIN: '/login',
 	SIGNUP: '/signup',
-	INCOM: '/income',
+	INCOME: '/income',
 	EXPANCE: '/expance'
 }

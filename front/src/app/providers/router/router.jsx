@@ -31,6 +31,14 @@ const router = createBrowserRouter([
 					{
 						path: ROUTES.MAIN,
 						element: <Home />
+					},
+					{
+						path: ROUTES.INCOME,
+						element: <Income />
+					},
+					{
+						path: ROUTES.EXPANCE,
+						element: <Expance />
 					}
 				]
 			}
