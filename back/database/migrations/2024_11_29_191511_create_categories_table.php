@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id('category_id');
-            $table->enum('category_name', ['одежда', 'хобби', 'супермаркет', 'рестораны', 'здоровье', 'транспорт', 'комунальные услуги', 'свзяь', 'другое']);
+            $table->id();
+            $table->string('category_name');
             $table->timestamps();
         });
     }
