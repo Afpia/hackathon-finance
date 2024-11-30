@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Container, Typography, Box, Avatar, TextField, FormControl, InputLabel, Select, MenuItem, Grid, Dialog, DialogActions, DialogContent, DialogTitle, Switch, Snackbar } from '@mui/material';
+
 import { Link } from 'react-router-dom';
 
 export const Home = () => {
@@ -106,10 +107,31 @@ export const Home = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 4 }}>
           <Link to="/" style={{ margin: '0 15px' }}><Button variant="text" sx={{ color: '#4A90E2' }}>Бюджет</Button></Link>
           <Link to="/income" style={{ margin: '0 15px' }}><Button variant="text" sx={{ color: '#4A90E2' }}>Доходы</Button></Link>
-          <Link to="/expense" style={{ margin: '0 15px' }}><Button variant="text" sx={{ color: '#4A90E2' }}>Расходы</Button></Link>
+          <Link to="/expance" style={{ margin: '0 15px' }}><Button variant="text" sx={{ color: '#4A90E2' }}>Расходы</Button></Link>
         </Box>
 
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#4A90E2', textAlign: 'center', marginBottom: 3 }}>Финансовая панель</Typography>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 4 }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold' }}>Рекомендации по финансовому управлению</Typography>
+            <Switch checked={showRecommendations} onChange={handleToggleRecommendations} />
+            <Typography variant="body1" sx={{ marginTop: 2 }}>
+              {showRecommendations ? 'Советы активированы: Снижайте расходы на еду на 10%!' : 'Советы не активированы.'}
+            </Typography>
+          </Box>
+          
+          <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            <FormControl width='80%'>
+              <InputLabel>Выбор Валюты</InputLabel>
+              <Select value={currency} onChange={handleCurrencyChange}>
+                <MenuItem value="RUB">Рубли (RUB)</MenuItem>
+                <MenuItem value="USD">Доллары США (USD)</MenuItem>
+                <MenuItem value="EUR">Евро (EUR)</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
 
         <Box sx={{ marginTop: 4, width: '100%' }}>
           <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>Установка бюджета</Typography>
@@ -129,86 +151,7 @@ export const Home = () => {
             <Typography key={index} variant="body2" sx={{ color: '#555' }}>{category}: {categoryPercentages[category]}%</Typography>
           ))}
         </Box>
-
-        <Box sx={{ marginTop: 4 }}>
-          <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold' }}>Рекомендации по финансовому управлению</Typography>
-          <Switch checked={showRecommendations} onChange={handleToggleRecommendations} />
-          <Typography variant="body1" sx={{ marginTop: 2 }}>{showRecommendations ? 'Советы активированы: Снижайте расходы на еду на 10%!' : 'Советы не активированы.'}</Typography>
-        </Box>
-
-        <Box sx={{ marginTop: 4 }}>
-          <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold' }}>Выбор валюты</Typography>
-          <FormControl fullWidth>
-            <InputLabel>Валюта</InputLabel>
-            <Select value={currency} onChange={handleCurrencyChange}>
-              <MenuItem value="RUB">RUB (Рубли)</MenuItem>
-              <MenuItem value="USD">USD (Доллары)</MenuItem>
-              <MenuItem value="EUR">EUR (Евро)</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
-        <Box sx={{ marginTop: 4, width: '100%' }}>
-          <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>История транзакций</Typography>
-          
-          <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>История доходов</Typography>
-          {incomeHistory.length === 0 ? (
-            <Typography sx={{ color: '#555' }}>История доходов пуста</Typography>
-          ) : (
-            <Box>
-              {incomeHistory.map((item, index) => (
-                <Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }} onClick={() => openItemModal(item, 'income')}>
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Сумма: {item.amount} ₽</Typography>
-                  <Typography variant="body2" sx={{ color: '#555' }}>Описание: {item.description}</Typography>
-                </Box>
-              ))}
-            </Box>
-          )}
-
-          <Typography variant="h6" sx={{ color: '#4A90E2', fontWeight: 'bold', marginTop: 4, marginBottom: 2 }}>История расходов</Typography>
-          {expenseHistory.length === 0 ? (
-            <Typography sx={{ color: '#555' }}>История расходов пуста</Typography>
-          ) : (
-            <Box>
-              {expenseHistory.map((item, index) => (
-                <Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }} onClick={() => openItemModal(item, 'expense')}>
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Сумма: {item.amount} ₽</Typography>
-                  <Typography variant="body2" sx={{ color: '#555' }}>Описание: {item.description} - Категория: {item.category}</Typography>
-                </Box>
-              ))}
-            </Box>
-          )}
-        </Box>
-
-        <Snackbar
-          open={openSnackbar}
-          message="Цель по сбережениям сохранена!"
-          autoHideDuration={3000}
-          onClose={() => setOpenSnackbar(false)}
-        />
-
-        <Box sx={{ marginTop: 5, textAlign: 'center' }}>
-          <Button variant="contained" sx={{ padding: '12px', fontSize: '1rem', textTransform: 'none', '&:hover': { backgroundColor: '#005BB5' } }}>
-            Узнать больше
-          </Button>
-        </Box>
       </Box>
-
-      <Dialog open={openModal} onClose={closeItemModal}>
-        <DialogTitle>{selectedItem ? selectedItem.type === 'income' ? 'Доход' : 'Расход' : ''}</DialogTitle>
-        <DialogContent>
-          {selectedItem && (
-            <>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Сумма: {selectedItem.item.amount} ₽</Typography>
-              <Typography variant="body2" sx={{ color: '#555' }}>Описание: {selectedItem.item.description}</Typography>
-              {selectedItem.type === 'expense' && <Typography variant="body2" sx={{ color: '#555' }}>Категория: {selectedItem.item.category}</Typography>}
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeItemModal} color="primary">Закрыть</Button>
-        </DialogActions>
-      </Dialog>
     </Container>
   );
 };
