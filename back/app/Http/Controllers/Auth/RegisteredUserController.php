@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -27,7 +26,6 @@ class RegisteredUserController extends Controller
         ]);
 
         return response()->json(
-            $authService->register($validated)
-        , 201);
+            $authService->register($validated), 201);
     }
 }

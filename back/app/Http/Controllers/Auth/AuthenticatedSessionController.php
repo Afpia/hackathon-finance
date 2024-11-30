@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +13,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(AuthService $authService,Request $request): Response
+    public function store(AuthService $authService, Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -23,7 +22,7 @@ class AuthenticatedSessionController extends Controller
 
             return response()->json(['access_token' => $token, 'user' => auth()->user()]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Ошибка аутентификации'], 500);
+            return response()->json(['message' => 'неверный логин или пароль'], 500);
         }
     }
 

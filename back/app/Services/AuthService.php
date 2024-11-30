@@ -19,18 +19,13 @@ class AuthService extends BaseService
         return $this->repo->find($email);
     }
 
-    public function login(array $credentials): array
+    public function login(array $credentials)
     {
-        $user = $this->checkUser($credentials['email']);
-
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            return [
-                'access_token' => $user->createToken('api_token')->plainTextToken,
-                'user' => $user,
-            ];
+        if (auth()->attempt($credentials)) {
+            return auth()->user()->createToken('auth_token')->plainTextToken;
         }
 
-        return ['message' => 'Invalid credentials'];
+        throw new \Exception('Invalid credentials');
     }
 
     public function register(array $input)
