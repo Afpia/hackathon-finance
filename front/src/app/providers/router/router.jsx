@@ -5,6 +5,8 @@ import { NotFound } from '../../../pages/not-found'
 import { Login } from '../../../pages/login'
 import { Signup } from '../../../pages/signup'
 import { Home } from '../../../pages/home'
+import { Income } from '../../../pages/income'
+import { Expance } from '../../../pages/expance'
 import { PrivateRouter } from './privateRoute'
 
 const router = createBrowserRouter([
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
 					{
 						path: ROUTES.MAIN,
 						element: <Home />
+					},
+					{
+						path: ROUTES.INCOME,
+						element: <Income />
+					},
+					{
+						path: ROUTES.EXPANCE,
+						element: <Expance />
 					}
 				]
 			}
