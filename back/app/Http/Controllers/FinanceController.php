@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Finance;
 use App\Services\FinanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,9 +44,9 @@ class FinanceController extends Controller
       
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Finance $id)
     {
-        dd($request->description);
+        // dd($request->description);
         $this->financeService->update( $id, [
             'incomeORexpense' => $request->incomeORexpense,
             'description' => $request->description,
