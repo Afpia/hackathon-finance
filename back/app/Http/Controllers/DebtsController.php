@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Goal;
 use App\Services\DebtsServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,10 +27,22 @@ class DebtsController extends Controller
             ]);
             $this->debtsServices->create([
                 'user_id' => $request->user()->id,
+                'goal' => $request->goal,
                 'total_amount' => $request->total_amount,
                 'curently_amount' => $request->curently_amount,
                 'deadlines' => $request->deadlines,
                 'status' => $request->status
             ]);
+    }
+    public function update(Request $request, $id){
+        $user = Auth::user();
+        $DebtsRecord = Goal::find($id);
+        if (!$DebtsRecord || $DebtsRecord->user_id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized or record not found'], 403);
+        }
+        $this->debtsServices->update($id, [
+            'curently_amount' => $request->curently_amount,
+        ]);  
+        return response()->json(['message' => 'Record updated successfully']);
     }
 }

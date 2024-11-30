@@ -43,4 +43,4 @@ Route::delete('/finance/{id}', [FinanceController::class, 'destroy'])->middlewar
 
 Route::get('/debts', [DebtsController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/goals', [DebtsController::class, 'store'])->middleware('auth:sanctum');
-Route::patch('goals/{id}', [DebtsController::class, 'update'])->middleware('auth:sanctum');
+Route::patch('/goals/{id}', [DebtsController::class, 'update'])->middleware('auth:sanctum');
