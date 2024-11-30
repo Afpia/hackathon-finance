@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\AuthRepository;
-use Illuminate\Support\Facades\Hash;
 
 class AuthService extends BaseService
 {
