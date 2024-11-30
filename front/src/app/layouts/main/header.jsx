@@ -1,9 +1,11 @@
 import { Box, Button, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constant/routes'
+import { useAuth } from '../../providers/auth/useAuth'
 
 export const Header = () => {
 	const navigate = useNavigate()
+	const { session } = useAuth()
 
 	const exit = () => {
 		localStorage.removeItem('session')
@@ -43,7 +45,7 @@ export const Header = () => {
 						color: 'transparent'
 					}}
 				>
-					Имя Фамилия
+					{session.user.name}
 				</Typography>
 				<Button onClick={exit} variant='outlined'>
 					Выйти
