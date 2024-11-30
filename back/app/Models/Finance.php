@@ -8,7 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Finance extends Model
 {
     use HasFactory;
-    public function incomeORexpense(){
-       return $this->hasMany(Category::class);
+    protected $fillable = [
+        'user_id',
+        'category_id',
+        'incomeORexpense',
+        'description',
+        'type'
+    ];
+    public function incomeORexpense()
+    {
+        return $this->hasMany(Category::class);
     }
+
+ 
 }
