@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Container, Typography, Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { Link } from 'react-router-dom';
+
+import { useState } from 'react';
+import { Button, Container, Typography, Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
+import { Link } from 'react-router-dom'; 
+
 
 export const Income = () => {
   const [income, setIncome] = useState({ amount: '', description: '', category: '' });
