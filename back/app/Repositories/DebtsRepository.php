@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\Goal;
+use App\Models\Debts;
 
 class DebtsRepository extends BaseRepository
 {
     protected $model; 
-    public function __construct(Goal $goal){
-            $this->model = $goal;
+    public function __construct(Debts $Debts){
+            $this->model = $Debts;
     }
 }

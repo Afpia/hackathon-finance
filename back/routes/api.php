@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DebtsController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GoalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,9 @@ Route::delete('/finance/{id}', [FinanceController::class, 'destroy'])->middlewar
 //Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
 
 
+Route::get('/goal', [GoalController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/goals', [GoalController::class, 'store'])->middleware('auth:sanctum');
+Route::patch('/goals/{id}', [GoalController::class, 'update'])->middleware('auth:sanctum');
+
+Route::post('/debts', [DebtsController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/debts', [DebtsController::class, 'index'])->middleware('auth:sanctum');
-Route::post('/goals', [DebtsController::class, 'store'])->middleware('auth:sanctum');
-Route::patch('/goals/{id}', [DebtsController::class, 'update'])->middleware('auth:sanctum');
