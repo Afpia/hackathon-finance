@@ -17,5 +17,20 @@ class FinanceService extends BaseService
 {
     return Finance::where('user_id', $userId)->get();
 }
-
+public function destroy($id)
+{
+    $financeRecord = Finance::find($id);
+    
+    if ($financeRecord) {
+        $financeRecord->delete();
+    }
+}
+public function update($id, array $data)
+{
+    $financeRecord = Finance::find($id);
+    
+    if ($financeRecord) {
+        $financeRecord->update($data);
+    }
+}
 }

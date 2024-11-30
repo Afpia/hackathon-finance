@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DebtsController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
@@ -31,10 +32,15 @@ Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:san
 // Route::delete('/profile', [ProfileController::class, 'destroy']);
 
 Route::get('/finance', [FinanceController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/finance/{id}', [FinanceController::class, 'show']);
+Route::get('/finance/{id}', [FinanceController::class, 'show'])->middleware('auth:sanctum');
 Route::post('/finance', [FinanceController::class, 'store'])->middleware('auth:sanctum');
-Route::put('/finance/{id}', [FinanceController::class, 'update']);
-Route::delete('/finance/{id}', [FinanceController::class, 'destroy']);
+Route::put('/finance/{id}', [FinanceController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/finance/{id}', [FinanceController::class, 'destroy'])->middleware('auth:sanctum');
 
 //Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
 //Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
+
+
+Route::get('/debts', [DebtsController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/goals', [DebtsController::class, 'store'])->middleware('auth:sanctum');
+Route::patch('goals/{id}', [DebtsController::class, 'update'])->middleware('auth:sanctum');

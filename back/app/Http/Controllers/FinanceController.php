@@ -28,7 +28,9 @@ public function index()
 
     public function show($id)
     {
-        return response()->json(['finance' => $this->financeService->find($id)]);
+        $user = Auth::user();
+        $financeData = $this->financeService->getid($user->id);
+        return response()->json(['finance' =>$financeData->find($id)]);
     }
 
     public function store(Request $request)
@@ -47,17 +49,30 @@ public function index()
         ]);
       
     }
-
-    public function update(Request $request, Finance $id)
+    public function update(Request $request, $id)
     {
-        $this->financeService->update( $id, [
+        $user = Auth::user();
+        $financeRecord = Finance::find($id);
+        if (!$financeRecord || $financeRecord->user_id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized or record not found'], 403);
+        }
+        $this->financeService->update($id, [
+            'category_id' => $request->category_id,
             'incomeORexpense' => $request->incomeORexpense,
-            'description' => $request->description,
-        ]);
+            'type' => $request->type,
+            'description' => $request->description, 
+        ]);  
+        return response()->json(['message' => 'Record updated successfully']);
     }
-     
     public function destroy($id)
     {
-        $this->financeService->destroy($id);
+        $user = Auth::user();
+        $financeRecord = Finance::find($id);
+        if (!$financeRecord || $financeRecord->user_id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized or record not found'], 403);
+        }
+        $this->financeService->destroy($id);   
+        return response()->json(['message' => 'Record deleted successfully']);
     }
+    
 }
