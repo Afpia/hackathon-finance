@@ -9,6 +9,14 @@ class Finance extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'category_id',
+        'incomeORexpense',
+        'description',
+        'type',
+    ];
+
     public function incomeORexpense()
     {
         return $this->hasMany(Category::class);

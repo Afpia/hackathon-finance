@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FinanceController;
@@ -35,6 +36,8 @@ Route::get('/finance/{id}', [FinanceController::class, 'show']);
 Route::post('/finance', [FinanceController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/finance/{id}', [FinanceController::class, 'update']);
 Route::delete('/finance/{id}', [FinanceController::class, 'destroy']);
+
+Route::get('/analytics', [AnalyticsController::class, 'index'])->middleware('auth:sanctum');
 
 //Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
 //Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);

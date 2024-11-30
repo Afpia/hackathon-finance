@@ -12,4 +12,14 @@ class FinanceService extends BaseService
     {
         $this->repo = $financeRepository;
     }
+
+    public function analytic()
+    {
+        return [
+            'total_income' => $this->repo->TotalIncome(),
+            'total_expense' => $this->repo->TotalExpense(),
+            'top_categories' => $this->repo->TopCategories(),
+            'largest_expense' => $this->repo->LargestExpense(),
+        ];
+    }
 }
