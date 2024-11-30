@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\FinanceService;
+use Auth;
 use Illuminate\Http\Request;
 
 class FinanceController extends Controller
@@ -16,13 +17,15 @@ class FinanceController extends Controller
 
     public function index()
     {
-        return response()->json(['finance' => $this->financeService->all()], 200);
+        $user = Auth::user();
+        $financeData = $this->financeService->getid($user->id);
+
+        return response()->json(['finance' => $financeData]);
     }
 
     public function show($id)
     {
-
-        return response()->json(['finance' => $this->financeService->find($id)], 200);
+        return response()->json(['finance' => $this->financeService->find($id)]);
     }
 
     public function store(Request $request)
@@ -32,6 +35,7 @@ class FinanceController extends Controller
             'incomeORexpense' => 'required',
             'type' => 'required',
         ]);
+
         $this->financeService->create([
             'user_id' => $request->user()->id,
             'category_id' => $request->category_id,

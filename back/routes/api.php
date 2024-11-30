@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
@@ -25,19 +26,26 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth:sanctum');
 
-Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:sanctum');
-// Route::put('/profile', [ProfileController::class, 'update']);
-// Route::delete('/profile', [ProfileController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::get('/finance', [FinanceController::class, 'index']);
-Route::get('/finance/{id}', [FinanceController::class, 'show']);
-Route::post('/finance', [FinanceController::class, 'store'])->middleware('auth:sanctum');
-Route::put('/finance/{id}', [FinanceController::class, 'update']);
-Route::delete('/finance/{id}', [FinanceController::class, 'destroy']);
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
-Route::get('/analytics', [AnalyticsController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/profile', [ProfileController::class, 'show']);
+    // Route::put('/profile', [ProfileController::class, 'update']);
+    // Route::delete('/profile', [ProfileController::class, 'destroy']);
 
-//Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
-//Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
+    Route::get('/finance', [FinanceController::class, 'index']);
+    Route::get('/finance/{id}', [FinanceController::class, 'show']);
+    Route::post('/finance', [FinanceController::class, 'store']);
+    Route::put('/finance/{id}', [FinanceController::class, 'update']);
+    Route::delete('/finance/{id}', [FinanceController::class, 'destroy']);
+
+    Route::get('/analytics', [AnalyticsController::class, 'index']);
+
+    Route::get('/categories', [CategoriesController::class, 'index']);
+
+    //Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
+    //Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
+
+});

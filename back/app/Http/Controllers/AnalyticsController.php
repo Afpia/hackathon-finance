@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\FinanceService;
+use Illuminate\Http\Request;
 
 class AnalyticsController extends Controller
 {
@@ -13,8 +14,10 @@ class AnalyticsController extends Controller
         $this->financeService = $financeService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json($this->financeService->analytic());
+        $period = $request->input('period', 'all');
+
+        return response()->json($this->financeService->analytic($period));
     }
 }

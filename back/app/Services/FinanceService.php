@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Finance;
 use App\Repositories\FinanceRepository;
 
 class FinanceService extends BaseService
@@ -13,13 +14,18 @@ class FinanceService extends BaseService
         $this->repo = $financeRepository;
     }
 
-    public function analytic()
+    public function analytic($period = 'all')
     {
         return [
-            'total_income' => $this->repo->TotalIncome(),
-            'total_expense' => $this->repo->TotalExpense(),
-            'top_categories' => $this->repo->TopCategories(),
-            'largest_expense' => $this->repo->LargestExpense(),
+            'total_income' => $this->repo->TotalIncome($period),
+            'total_expense' => $this->repo->TotalExpense($period),
+            'top_categories' => $this->repo->TopCategories($period),
+            'largest_expense' => $this->repo->LargestExpense($period),
         ];
+    }
+
+    public function getid($userId)
+    {
+        return Finance::where('user_id', $userId)->get();
     }
 }

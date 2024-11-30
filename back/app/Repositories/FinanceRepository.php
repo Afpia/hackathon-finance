@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Finance;
 use Auth;
+use Carbon\Carbon;
 use DB;
 
 class FinanceRepository extends BaseRepository
@@ -15,40 +16,70 @@ class FinanceRepository extends BaseRepository
         $this->model = $finans;
     }
 
-    public function TotalIncome()
+    private function applyPeriodFilter($query, $period)
     {
-        return $this->model
-        ->where('user_id', Auth::id())
-        ->where('type', 'income')
-        ->sum('incomeORexpense');
+        switch ($period) {
+            case 'day':
+                return $query->whereDate('finances.created_at', Carbon::today());
+
+            case 'week':
+                return $query->whereBetween('finances.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+
+            case 'month':
+                return $query->whereBetween('finances.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+
+            case 'year':
+                return $query->whereBetween('finances.created_at', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()]);
+
+            default:
+                return $query;
+        }
     }
 
-    public function TotalExpense()
+    public function TotalIncome($period = 'all')
     {
-        return $this->model
-        ->where('user_id', Auth::id())
-        ->where('type', 'expence')
-        ->sum('incomeORexpense');
+        $query = $this->model
+            ->where('user_id', Auth::id())
+            ->where('type', 'income');
+
+        $query = $this->applyPeriodFilter($query, $period);
+
+        return $query->sum('incomeORexpense');
     }
 
-    public function TopCategories()
+    public function TotalExpense($period = 'all')
     {
-        return $this->model
-        ->select('categories.category_name', DB::raw('SUM(finances.incomeORexpense) as total'))
-        ->join('categories', 'finances.category_id', '=', 'categories.id')
-        ->where('finances.user_id', Auth::id())
-        ->groupBy('categories.category_name')
-        ->orderByDesc('total')
-        ->take(3)
-        ->get();
+        $query = $this->model
+            ->where('user_id', Auth::id())
+            ->where('type', 'expence');
+
+        $query = $this->applyPeriodFilter($query, $period);
+
+        return $query->sum('incomeORexpense');
     }
 
-    public function LargestExpense()
+    public function TopCategories($period = 'all')
     {
-        return $this->model
-        ->where('user_id', Auth::id())
-        ->where('type', 'expence')
-        ->orderByDesc('incomeORexpense')
-        ->first();
+        $query = $this->model
+            ->select('categories.category_name', DB::raw('SUM(finances.incomeORexpense) as total'))
+            ->join('categories', 'finances.category_id', '=', 'categories.id')
+            ->where('finances.user_id', Auth::id())
+            ->groupBy('categories.category_name')
+            ->orderByDesc('total');
+
+        $query = $this->applyPeriodFilter($query, $period);
+
+        return $query->take(3)->get();
+    }
+
+    public function LargestExpense($period = 'all')
+    {
+        $query = $this->model
+            ->where('user_id', Auth::id())
+            ->where('type', 'expence');
+
+        $query = $this->applyPeriodFilter($query, $period);
+
+        return $query->orderByDesc('incomeORexpense')->first();
     }
 }
