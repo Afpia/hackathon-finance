@@ -30,7 +30,7 @@ Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:san
 // Route::put('/profile', [ProfileController::class, 'update']);
 // Route::delete('/profile', [ProfileController::class, 'destroy']);
 
-Route::get('/finance', [FinanceController::class, 'index']);
+Route::get('/finance', [FinanceController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/finance/{id}', [FinanceController::class, 'show']);
 Route::post('/finance', [FinanceController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/finance/{id}', [FinanceController::class, 'update']);

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Finance;
 use App\Repositories\FinanceRepository;
 
 class FinanceService extends BaseService
@@ -12,4 +13,9 @@ class FinanceService extends BaseService
     {
         $this->repo = $financeRepository;
     }
+    public function getid($userId)
+{
+    return Finance::where('user_id', $userId)->get();
+}
+
 }

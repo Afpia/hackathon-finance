@@ -16,14 +16,18 @@ class FinanceController extends Controller
         $this->financeService = $financeService;
     }
 
-    public function index()
-    {
-        return response()->json(['finance' => $this->financeService->all()]);
-    }
+
+public function index()
+{
+    $user = Auth::user();
+    $financeData = $this->financeService->getid($user->id);
+
+    return response()->json(['finance' => $financeData]);
+}
+
 
     public function show($id)
     {
-
         return response()->json(['finance' => $this->financeService->find($id)]);
     }
 
@@ -46,7 +50,6 @@ class FinanceController extends Controller
 
     public function update(Request $request, Finance $id)
     {
-        // dd($request->description);
         $this->financeService->update( $id, [
             'incomeORexpense' => $request->incomeORexpense,
             'description' => $request->description,
