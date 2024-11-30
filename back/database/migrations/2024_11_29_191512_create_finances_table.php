@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('finances', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(category::class)->constrained();
+            $table->foreignIdFor(category::class)->constrained()->nullable();
             $table->float('incomeORexpense');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->enum('type', ['income', 'expence']);
             $table->timestamps();
         });
