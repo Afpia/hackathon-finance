@@ -6,8 +6,10 @@ import { Login } from '../../../pages/login'
 import { Signup } from '../../../pages/signup'
 import { Home } from '../../../pages/home'
 import { Income } from '../../../pages/income'
-import { Expance } from '../../../pages/expance'
-import { PrivateRouter } from './privateRoute'
+import { PrivateRouterPrivate } from './privateRoute'
+import { Expanse } from '../../../pages/expanse'
+import { Layout } from '../../layouts/main/layout'
+import { PrivateRouterPublic } from './privateRoutePublic'
 
 const router = createBrowserRouter([
 	{
@@ -15,18 +17,24 @@ const router = createBrowserRouter([
 		element: <NotFound />
 	},
 	{
-		path: ROUTES.LOGIN,
-		element: <Login />
-	},
-	{
-		path: ROUTES.SIGNUP,
-		element: <Signup />
-	},
-	{
-		element: <PrivateRouter />,
+		element: <PrivateRouterPublic />,
 		children: [
 			{
-				// element: <LayoutChat />,
+				path: ROUTES.LOGIN,
+				element: <Login />
+			},
+			{
+				path: ROUTES.SIGNUP,
+				element: <Signup />
+			}
+		]
+	},
+
+	{
+		element: <PrivateRouterPrivate />,
+		children: [
+			{
+				element: <Layout />,
 				children: [
 					{
 						path: ROUTES.MAIN,
@@ -37,8 +45,8 @@ const router = createBrowserRouter([
 						element: <Income />
 					},
 					{
-						path: ROUTES.EXPANCE,
-						element: <Expance />
+						path: ROUTES.EXPANSE,
+						element: <Expanse />
 					}
 				]
 			}

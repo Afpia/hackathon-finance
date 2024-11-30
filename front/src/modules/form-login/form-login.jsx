@@ -3,17 +3,44 @@ import { useFormik } from 'formik'
 import { login } from '../../utils/api/request/login'
 import { LoginScheme } from './schema'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
+import { useAuth } from '../../app/providers/auth/useAuth'
+import { Toaster } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { notifyError, notifySuccess } from '../../utils/helpers/notification'
 
 export const FormLogin = () => {
+	const navigate = useNavigate()
+	const { setSession } = useAuth()
+
 	const formik = useFormik({
 		initialValues: {
 			email: '',
 			password: ''
 		},
+		validate: (values) => {
+			const errors = {}
+			Object.keys(values).forEach((key) => {
+				if (!values[key]) {
+					return (errors[key] = 'Обязательное поле')
+				}
+			})
+			return errors
+		},
 		validationSchema: toFormikValidationSchema(LoginScheme),
 		onSubmit: async (values) => {
-			const { data } = await login({ data: values })
-			console.log(data)
+			try {
+				const { data } = await login({ data: values })
+
+				setSession({
+					user: data.user,
+					accessToken: data.access_token
+				})
+				notifySuccess()
+				navigate('/', { replace: true })
+			} catch (error) {
+				notifyError(error.message)
+				formik.setErrors({ email: true, password: true,  })
+			}
 		}
 	})
 
@@ -25,10 +52,12 @@ export const FormLogin = () => {
 				variant='outlined'
 				fullWidth
 				margin='normal'
-				onChange={formik.handleChange}
-				value={formik.values.email}
+				{...formik.getFieldProps('email')}
+				error={!!(formik.touched.email && formik.errors.email)}
+				helperText={
+					formik.touched.email && formik.errors.email ? <span style={{ color: 'red' }}>{formik.errors.email}</span> : null
+				}
 			/>
-			{formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
 
 			<TextField
 				id='password'
@@ -37,10 +66,14 @@ export const FormLogin = () => {
 				variant='outlined'
 				fullWidth
 				margin='normal'
-				onChange={formik.handleChange}
-				value={formik.values.password}
+				error={!!(formik.touched.password && formik.errors.password)}
+				{...formik.getFieldProps('password')}
+				helperText={
+					formik.touched.password && formik.errors.password ? (
+						<span style={{ color: 'red' }}>{formik.errors.password}</span>
+					) : null
+				}
 			/>
-			{formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
 
 			<Button
 				variant='contained'
@@ -56,6 +89,7 @@ export const FormLogin = () => {
 			>
 				Войти
 			</Button>
+			<Toaster />
 		</form>
 	)
 }
