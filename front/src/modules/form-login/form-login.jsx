@@ -4,7 +4,6 @@ import { login } from '../../utils/api/request/login'
 import { LoginScheme } from './schema'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { useAuth } from '../../app/providers/auth/useAuth'
-import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { notifyError, notifySuccess } from '../../utils/helpers/notification'
 
@@ -35,11 +34,11 @@ export const FormLogin = () => {
 					user: data.user,
 					accessToken: data.access_token
 				})
-				notifySuccess()
+				notifySuccess('Вы успешно вошли в систему')
 				navigate('/', { replace: true })
 			} catch (error) {
 				notifyError(error.message)
-				formik.setErrors({ email: true, password: true,  })
+				formik.setErrors({ email: true, password: true })
 			}
 		}
 	})
@@ -89,7 +88,6 @@ export const FormLogin = () => {
 			>
 				Войти
 			</Button>
-			<Toaster />
 		</form>
 	)
 }

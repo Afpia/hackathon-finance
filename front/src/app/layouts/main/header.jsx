@@ -2,13 +2,17 @@ import { Box, Button, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constant/routes'
 import { useAuth } from '../../providers/auth/useAuth'
+import { notifySuccess } from '../../../utils/helpers/notification'
+import { Toaster } from 'react-hot-toast'
 
 export const Header = () => {
 	const navigate = useNavigate()
-	const { session } = useAuth()
+	const { session, setSession } = useAuth()
 
 	const exit = () => {
+		notifySuccess('Вы вышли из системы')
 		localStorage.removeItem('session')
+		setSession({ user: { id: '', name: '', email: '' }, accessToken: '' })
 		navigate('/login', { replace: true })
 	}
 
@@ -51,6 +55,7 @@ export const Header = () => {
 					Выйти
 				</Button>
 			</Box>
+			<Toaster />
 		</Box>
 	)
 }

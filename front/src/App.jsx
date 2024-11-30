@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast'
 import { Router } from './app/providers/router/router'
 import { AuthProvider } from './app/providers/auth/provider'
 
@@ -12,6 +13,7 @@ function App() {
 	return (
 		<AuthProvider>
 			<Router />
+			<Toaster />
 		</AuthProvider>
 	)
 }

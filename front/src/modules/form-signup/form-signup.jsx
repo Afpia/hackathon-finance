@@ -6,7 +6,6 @@ import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../app/providers/auth/useAuth'
 import { notifyError, notifySuccess } from '../../utils/helpers/notification'
-import { Toaster } from 'react-hot-toast'
 
 export const FormSignup = () => {
 	const navigate = useNavigate()
@@ -37,7 +36,7 @@ export const FormSignup = () => {
 					user: data.user,
 					accessToken: data.access_token
 				})
-				notifySuccess()
+				notifySuccess('Вы успешно вошли в систему')
 				navigate('/', { replace: true })
 			} catch (error) {
 				notifyError(error.message)
@@ -138,7 +137,6 @@ export const FormSignup = () => {
 			>
 				Зарегистрироваться
 			</Button>
-			<Toaster />
 		</form>
 	)
 }
