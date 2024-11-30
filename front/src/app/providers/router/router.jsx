@@ -6,9 +6,10 @@ import { Login } from '../../../pages/login'
 import { Signup } from '../../../pages/signup'
 import { Home } from '../../../pages/home'
 import { Income } from '../../../pages/income'
-import { PrivateRouter } from './privateRoute'
+import { PrivateRouterPrivate } from './privateRoute'
 import { Expanse } from '../../../pages/expanse'
 import { Layout } from '../../layouts/main/layout'
+import { PrivateRouterPublic } from './privateRoutePublic'
 
 const router = createBrowserRouter([
 	{
@@ -16,15 +17,21 @@ const router = createBrowserRouter([
 		element: <NotFound />
 	},
 	{
-		path: ROUTES.LOGIN,
-		element: <Login />
+		element: <PrivateRouterPublic />,
+		children: [
+			{
+				path: ROUTES.LOGIN,
+				element: <Login />
+			},
+			{
+				path: ROUTES.SIGNUP,
+				element: <Signup />
+			}
+		]
 	},
+
 	{
-		path: ROUTES.SIGNUP,
-		element: <Signup />
-	},
-	{
-		element: <PrivateRouter />,
+		element: <PrivateRouterPrivate />,
 		children: [
 			{
 				element: <Layout />,

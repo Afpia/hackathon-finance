@@ -1,8 +1,15 @@
 import { Box, Button, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constant/routes'
 
 export const Header = () => {
+	const navigate = useNavigate()
+
+	const exit = () => {
+		localStorage.removeItem('session')
+		navigate('/login', { replace: true })
+	}
+
 	return (
 		<Box
 			sx={{
@@ -38,7 +45,9 @@ export const Header = () => {
 				>
 					Имя Фамилия
 				</Typography>
-				<Button variant='outlined'>Выйти</Button>
+				<Button onClick={exit} variant='outlined'>
+					Выйти
+				</Button>
 			</Box>
 		</Box>
 	)
