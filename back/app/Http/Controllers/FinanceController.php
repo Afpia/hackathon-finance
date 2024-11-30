@@ -28,10 +28,8 @@ class FinanceController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'incomeORexpense' => 'required',
-            'description' => 'reqiured',
-        ]);
+        dd($request->user()->id);
+
         $this->financeService->create([
             'user_id' => Auth::id(),
             'category_id' => $request->category_id,
