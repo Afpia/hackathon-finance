@@ -2,8 +2,8 @@ import { Button, Typography, Box, TextField, FormControl, InputLabel, Select, Me
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export const Income = () => {
-	const [incomeHistory, setIncomeHistory] = useState([])
+export const Expanse = () => {
+	const [expenseHistory, setExpenseHistory] = useState([])
 
 	return (
 		<>
@@ -16,7 +16,7 @@ export const Income = () => {
 					textAlign: 'center'
 				}}
 			>
-				Доходы
+				Расходы
 			</Typography>
 
 			<Typography
@@ -28,26 +28,25 @@ export const Income = () => {
 					fontWeight: 'normal'
 				}}
 			>
-				Добавьте ваш доход и просмотрите общую сумму.
+				Добавьте ваш расход и просмотрите общую сумму.
 			</Typography>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 20 }}>
 				<Box>
 					<Typography variant='h6' sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>
-						История доходов
+						История расходов
 					</Typography>
-
-					{incomeHistory.length === 0 ? (
-						<Typography sx={{ color: '#555' }}>История доходов пуста</Typography>
+					{expenseHistory.length === 0 ? (
+						<Typography sx={{ color: '#555' }}>История расходов пуста</Typography>
 					) : (
 						<Box>
-							{incomeHistory.map((item, index) => (
+							{expenseHistory.map((item, index) => (
 								<Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }}>
 									<Typography variant='body1' sx={{ fontWeight: 'bold' }}>
 										Сумма: {item.amount} ₽
 									</Typography>
 									<Typography variant='body2' sx={{ color: '#555' }}>
-										Описание: {item.description}
+										Описание: {item.description} - Категория: {item.category}
 									</Typography>
 								</Box>
 							))}
@@ -66,7 +65,7 @@ export const Income = () => {
 					}}
 				>
 					<Typography variant='h6' gutterBottom sx={{ color: '#4A90E2', fontWeight: 'bold' }}>
-						Добавить доход
+						Добавить расход
 					</Typography>
 					<form>
 						<TextField label='Сумма' name='amount' fullWidth required sx={{ marginBottom: 2 }} type='number' />
@@ -74,14 +73,14 @@ export const Income = () => {
 						<FormControl fullWidth sx={{ marginBottom: 2 }}>
 							<InputLabel>Категория</InputLabel>
 							<Select name='category' label='Категория' required>
-								<MenuItem value='Salary'>Зарплата</MenuItem>
-								<MenuItem value='Freelance'>Фриланс</MenuItem>
-								<MenuItem value='Investment'>Инвестиции</MenuItem>
-								<MenuItem value='Other'>Прочее</MenuItem>
+								<MenuItem value='Food'>Еда</MenuItem>
+								<MenuItem value='Transport'>Транспорт</MenuItem>
+								<MenuItem value='Entertainment'>Развлечения</MenuItem>
+								<MenuItem value='Utilities'>Коммунальные услуги</MenuItem>
 							</Select>
 						</FormControl>
-						<Button variant='contained' type='submit' sx={{ width: '100%', marginBottom: 2, padding: '12px' }}>
-							Добавить доход
+						<Button variant='contained' type='submit' sx={{ width: '100%', padding: '12px', marginBottom: 2 }}>
+							Добавить расход
 						</Button>
 					</form>
 				</Box>

@@ -6,8 +6,9 @@ import { Login } from '../../../pages/login'
 import { Signup } from '../../../pages/signup'
 import { Home } from '../../../pages/home'
 import { Income } from '../../../pages/income'
-import { Expance } from '../../../pages/expance'
 import { PrivateRouter } from './privateRoute'
+import { Expanse } from '../../../pages/expanse'
+import { Layout } from '../../layouts/main/layout'
 
 const router = createBrowserRouter([
 	{
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
 		element: <PrivateRouter />,
 		children: [
 			{
-				// element: <LayoutChat />,
+				element: <Layout />,
 				children: [
 					{
 						path: ROUTES.MAIN,
@@ -37,8 +38,8 @@ const router = createBrowserRouter([
 						element: <Income />
 					},
 					{
-						path: ROUTES.EXPANCE,
-						element: <Expance />
+						path: ROUTES.EXPANSE,
+						element: <Expanse />
 					}
 				]
 			}
