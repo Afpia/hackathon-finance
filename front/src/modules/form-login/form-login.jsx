@@ -4,11 +4,9 @@ import { login } from '../../utils/api/request/login'
 import { LoginScheme } from './schema'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { useAuth } from '../../app/providers/auth/useAuth'
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-
-const notifySuccess = () => toast.success('Вы вошли в систему')
-const notifyError = (error) => toast.error(`Мы не смогли войти в систему ${error}`)
+import { notifyError, notifySuccess } from '../../utils/helpers/notification'
 
 export const FormLogin = () => {
 	const navigate = useNavigate()
@@ -41,7 +39,7 @@ export const FormLogin = () => {
 				navigate('/', { replace: true })
 			} catch (error) {
 				notifyError(error.message)
-				formik.setErrors({ email: true, password: true })
+				formik.setErrors({ email: true, password: true,  })
 			}
 		}
 	})

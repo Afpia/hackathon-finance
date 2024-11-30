@@ -3,10 +3,14 @@ import { useFormik } from 'formik'
 import { signup } from '../../utils/api/request/singup'
 import { SignupSchema } from './schema'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
-// import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../app/providers/auth/useAuth'
+import { notifyError, notifySuccess } from '../../utils/helpers/notification'
+import { Toaster } from 'react-hot-toast'
 
 export const FormSignup = () => {
-	// const [showPassword, setShowPassword] = useState(false)
+	const navigate = useNavigate()
+	const { setSession } = useAuth()
 
 	const formik = useFormik({
 		initialValues: {
@@ -26,8 +30,19 @@ export const FormSignup = () => {
 		},
 		validationSchema: toFormikValidationSchema(SignupSchema),
 		onSubmit: async (values) => {
-			const { data } = await signup({ data: values })
-			console.log(data)
+			try {
+				const { data } = await signup({ data: values })
+
+				setSession({
+					user: data.user,
+					accessToken: data.access_token
+				})
+				notifySuccess()
+				navigate('/', { replace: true })
+			} catch (error) {
+				notifyError(error.message)
+				formik.setErrors({ email: true, name: true, password: true, password_confirmation: true })
+			}
 		}
 	})
 
@@ -123,6 +138,7 @@ export const FormSignup = () => {
 			>
 				Зарегистрироваться
 			</Button>
+			<Toaster />
 		</form>
 	)
 }
