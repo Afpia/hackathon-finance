@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('finances', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(category::class)->constrained();
+            $table->foreignIdFor(category::class)->default(20)->constrained();
             $table->float('incomeORexpense');
             $table->string('description');
             $table->enum('type', ['income', 'expense']);
