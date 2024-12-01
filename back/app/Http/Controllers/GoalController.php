@@ -45,4 +45,14 @@ class GoalController extends Controller
         ]);  
         return response()->json(['message' => 'Record updated successfully']);
     }
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $GoalRecord = Goal::find($id);
+        if (!$GoalRecord || $GoalRecord->user_id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized or record not found'], 403);
+        }
+        $this->GoalService->destroy($id);   
+        return response()->json(['message' => 'Record deleted successfully']);
+    }
 }

@@ -21,4 +21,12 @@ class GoalService extends BaseService
             $DebtsRecord->update($data);
         }
     }
+    public function destroy($id)
+    {
+        $financeRecord = Goal::find($id);
+        
+        if ($financeRecord) {
+            $financeRecord->delete();
+        }
+    }
 }
