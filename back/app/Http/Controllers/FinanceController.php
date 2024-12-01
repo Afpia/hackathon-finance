@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Finance;
+use app\Models\Category;
 use App\Services\FinanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
@@ -20,6 +22,7 @@ class FinanceController extends Controller
 public function index()
 {
     $user = Auth::user();
+    
     $financeData = $this->financeService->getid($user->id);
 
     return response()->json(['finance' => $financeData]);
@@ -29,8 +32,10 @@ public function index()
     public function show($id)
     {
         $user = Auth::user();
+        $category = DB::table('categories')->where('id', $id)->get('category_name');
         $financeData = $this->financeService->getid($user->id);
-        return response()->json(['finance' =>$financeData->find($id)]);
+        return response()->json(['finance' =>$financeData->find($id), $category] );
+        
     }
 
     public function store(Request $request)
