@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Debts;
 use App\Models\Goal;
 use App\Services\DebtsServices;
 use Illuminate\Http\Request;
@@ -42,18 +43,29 @@ class DebtsController extends Controller
             'status' => $request->status,
         ]);
     }
-
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $DebtsRecord = Goal::find($id);
-        if (! $DebtsRecord || $DebtsRecord->user_id !== $user->id) {
+        $DebtsRecord = Debts::find($id);
+        if (!$DebtsRecord || $DebtsRecord->user_id !== $user->id) {
             return response()->json(['message' => 'Unauthorized or record not found'], 403);
         }
         $this->debtsServices->update($id, [
-            'curently_amount' => $request->curently_amount,
-        ]);
-
+            'amount' => $request->amount,
+            'description' => $request->description	,
+            'due_date' => $request->due_date,
+            'status' => $request->status, 
+        ]);  
         return response()->json(['message' => 'Record updated successfully']);
+    }
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $financeRecord = Debts::find($id);
+        if (!$financeRecord || $financeRecord->user_id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized or record not found'], 403);
+        }
+        $this->debtsServices->destroy($id);   
+        return response()->json(['message' => 'Record deleted successfully']);
     }
 }

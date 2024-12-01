@@ -5,7 +5,11 @@ import { NotFound } from '../../../pages/not-found'
 import { Login } from '../../../pages/login'
 import { Signup } from '../../../pages/signup'
 import { Home } from '../../../pages/home'
-import { PrivateRouter } from './privateRoute'
+import { Income } from '../../../pages/income'
+import { PrivateRouterPrivate } from './privateRoute'
+import { Expanse } from '../../../pages/expanse'
+import { Layout } from '../../layouts/main/layout'
+import { PrivateRouterPublic } from './privateRoutePublic'
 
 const router = createBrowserRouter([
 	{
@@ -13,22 +17,36 @@ const router = createBrowserRouter([
 		element: <NotFound />
 	},
 	{
-		path: ROUTES.LOGIN,
-		element: <Login />
-	},
-	{
-		path: ROUTES.SIGNUP,
-		element: <Signup />
-	},
-	{
-		element: <PrivateRouter />,
+		element: <PrivateRouterPublic />,
 		children: [
 			{
-				// element: <LayoutChat />,
+				path: ROUTES.LOGIN,
+				element: <Login />
+			},
+			{
+				path: ROUTES.SIGNUP,
+				element: <Signup />
+			}
+		]
+	},
+
+	{
+		element: <PrivateRouterPrivate />,
+		children: [
+			{
+				element: <Layout />,
 				children: [
 					{
 						path: ROUTES.MAIN,
 						element: <Home />
+					},
+					{
+						path: ROUTES.INCOME,
+						element: <Income />
+					},
+					{
+						path: ROUTES.EXPANSE,
+						element: <Expanse />
 					}
 				]
 			}

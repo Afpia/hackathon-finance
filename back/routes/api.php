@@ -58,6 +58,11 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/goal', [GoalController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/goals', [GoalController::class, 'store'])->middleware('auth:sanctum');
 Route::patch('/goals/{id}', [GoalController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/goals/{id}', [GoalController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::post('/debts', [DebtsController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/debts', [DebtsController::class, 'index'])->middleware('auth:sanctum');
+
+Route::put('/debts/{id}', [DebtsController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/debts/{id}', [DebtsController::class, 'destroy'])->middleware('auth:sanctum');
+
