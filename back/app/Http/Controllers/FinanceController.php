@@ -42,7 +42,7 @@ class FinanceController extends Controller
         $validate = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'incomeORexpense' => 'required|numeric',
-            'type' => 'required|in:income,expence',
+            'type' => 'required|in:income,expense',
             'description' => 'nullable|string',
         ]);
 
