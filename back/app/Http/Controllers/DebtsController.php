@@ -50,7 +50,7 @@ class DebtsController extends Controller
         if (!$DebtsRecord || $DebtsRecord->user_id !== $user->id) {
             return response()->json(['message' => 'Unauthorized or record not found'], 403);
         }
-        $this->DebtsServices->update($id, [
+        $this->debtsServices->update($id, [
             'amount' => $request->amount,
             'description' => $request->description	,
             'due_date' => $request->due_date,
@@ -65,7 +65,7 @@ class DebtsController extends Controller
         if (!$financeRecord || $financeRecord->user_id !== $user->id) {
             return response()->json(['message' => 'Unauthorized or record not found'], 403);
         }
-        $this->DebtsServices->destroy($id);   
+        $this->debtsServices->destroy($id);   
         return response()->json(['message' => 'Record deleted successfully']);
     }
 }
