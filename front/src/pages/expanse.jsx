@@ -1,9 +1,77 @@
 import { Button, Typography, Box, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../app/providers/auth/useAuth'
+import { categories } from '../utils/api/request/categories'
+import { notifyError, notifySuccess } from '../utils/helpers/notification'
+import { useFormik } from 'formik'
+import { finance } from '../utils/api/request/finance'
 
 export const Expanse = () => {
-	const [expenseHistory, setExpenseHistory] = useState([])
+	const { session } = useAuth()
+	const [categoriesList, setCategoriesList] = useState([])
+	const [incomeHistory, setIncomeHistory] = useState([])
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		async function fetchCategories() {
+			try {
+				const { data } = await categories({ config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
+				setCategoriesList(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+
+		fetchCategories()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [setIncomeHistory])
+
+	useEffect(() => {
+		async function fetchHistory() {
+			try {
+				const { data } = await history({ config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
+				setIncomeHistory(data.finance)
+				setLoading(false)
+			} catch (error) {
+				console.log(error.message)
+				setLoading(false)
+			}
+		}
+		fetchHistory()
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	const formik = useFormik({
+		initialValues: {
+			incomeORexpense: 0,
+			description: '',
+			category_id: 1,
+			type: 'expense'
+		},
+		validate: (values) => {
+			const errors = {}
+			Object.keys(values).forEach((key) => {
+				if (!values[key]) {
+					return (errors[key] = 'Обязательное поле')
+				}
+			})
+			return errors
+		},
+		onSubmit: async (values) => {
+			try {
+				const { data } = await finance({
+					data: values,
+					config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } }
+				})
+				setIncomeHistory(data.finance)
+				notifySuccess('Вы успешно добавили расход')
+			} catch (error) {
+				notifyError(error.message)
+				formik.setErrors({ email: true, password: true })
+			}
+		}
+	})
 
 	return (
 		<>
@@ -36,22 +104,28 @@ export const Expanse = () => {
 					<Typography variant='h6' sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>
 						История расходов
 					</Typography>
-					{expenseHistory.length === 0 ? (
-						<Typography sx={{ color: '#555' }}>История расходов пуста</Typography>
-					) : (
+
+					{loading && <Typography sx={{ color: '#555' }}>Загрузка...</Typography>}
+					{incomeHistory.length > 0 && !loading && (
 						<Box>
-							{expenseHistory.map((item, index) => (
-								<Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }}>
-									<Typography variant='body1' sx={{ fontWeight: 'bold' }}>
-										Сумма: {item.amount} ₽
-									</Typography>
-									<Typography variant='body2' sx={{ color: '#555' }}>
-										Описание: {item.description} - Категория: {item.category}
-									</Typography>
-								</Box>
-							))}
+							{incomeHistory
+								?.filter((item) => item.type === 'expense')
+								?.map((item, index) => (
+									<Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }}>
+										<Typography variant='body1' sx={{ fontWeight: 'bold' }}>
+											Сумма: {item.incomeORexpense} ₽
+										</Typography>
+										<Typography variant='body2' sx={{ color: '#555' }}>
+											Описание: {item.description}
+										</Typography>
+										<Typography variant='body2' sx={{ color: '#555' }}>
+											Категория: {item.category_name}
+										</Typography>
+									</Box>
+								))}
 						</Box>
 					)}
+					{incomeHistory.length === 0 && !loading && <Typography sx={{ color: '#555' }}>История доходов пуста</Typography>}
 				</Box>
 
 				<Box
@@ -67,16 +141,58 @@ export const Expanse = () => {
 					<Typography variant='h6' gutterBottom sx={{ color: '#4A90E2', fontWeight: 'bold' }}>
 						Добавить расход
 					</Typography>
-					<form>
-						<TextField label='Сумма' name='amount' fullWidth required sx={{ marginBottom: 2 }} type='number' />
-						<TextField label='Описание' name='description' fullWidth required sx={{ marginBottom: 2 }} />
+					<form onSubmit={formik.handleSubmit}>
+						<TextField
+							id='incomeORexpense'
+							label='Сумма'
+							name='amount'
+							fullWidth
+							sx={{ marginBottom: 2 }}
+							slotProps={{
+								htmlInput: {
+									max: 0
+								}
+							}}
+							type='number'
+							{...formik.getFieldProps('incomeORexpense')}
+							error={!!(formik.touched.incomeORexpense && formik.errors.incomeORexpense)}
+							helperText={
+								formik.touched.incomeORexpense && formik.errors.incomeORexpense ? (
+									<span style={{ color: 'red' }}>{formik.errors.incomeORexpense}</span>
+								) : null
+							}
+						/>
+						<TextField
+							label='Описание'
+							name='description'
+							fullWidth
+							sx={{ marginBottom: 2 }}
+							{...formik.getFieldProps('description')}
+							error={!!(formik.touched.description && formik.errors.description)}
+							helperText={
+								formik.touched.description && formik.errors.description ? (
+									<span style={{ color: 'red' }}>{formik.errors.description}</span>
+								) : null
+							}
+						/>
 						<FormControl fullWidth sx={{ marginBottom: 2 }}>
 							<InputLabel>Категория</InputLabel>
-							<Select name='category' label='Категория' required>
-								<MenuItem value='Food'>Еда</MenuItem>
-								<MenuItem value='Transport'>Транспорт</MenuItem>
-								<MenuItem value='Entertainment'>Развлечения</MenuItem>
-								<MenuItem value='Utilities'>Коммунальные услуги</MenuItem>
+							<Select
+								name='category'
+								label='Категория'
+								{...formik.getFieldProps('category_id')}
+								error={!!(formik.touched.category_id && formik.errors.category_id)}
+							>
+								{categoriesList.map((item, index) => (
+									<MenuItem key={index} value={item.id}>
+										{item.category_name}
+									</MenuItem>
+								))}
+								{formik.touched.category_id && formik.errors.category_id ? (
+									<span style={{ color: 'red', fontSize: '13px', marginLeft: '14px', fontWeight: '400' }}>
+										{formik.errors.category_id}
+									</span>
+								) : null}
 							</Select>
 						</FormControl>
 						<Button variant='contained' type='submit' sx={{ width: '100%', padding: '12px', marginBottom: 2 }}>

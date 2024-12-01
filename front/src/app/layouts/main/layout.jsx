@@ -10,9 +10,9 @@ export const Layout = () => {
 				sx={{
 					backgroundColor: '#fff',
 					padding: '30px',
-					borderRadius: '30px',
+					borderRadius: '30px 0px 0px 30px',
 					margin: '30px',
-					width: 'calc(100% - 60px)',
+					width: 'calc(100% - 30px)',
 					height: 'calc(100vh - 60px)',
 					minHeight: 'calc(100% - 60px)',
 					overflow: 'scroll',
