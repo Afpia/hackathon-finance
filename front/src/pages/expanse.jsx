@@ -150,7 +150,7 @@ export const Expanse = () => {
 							sx={{ marginBottom: 2 }}
 							slotProps={{
 								htmlInput: {
-									max: 0
+									min: 0
 								}
 							}}
 							type='number'
