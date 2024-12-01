@@ -5,14 +5,16 @@ import { notifyError, notifySuccess } from '../utils/helpers/notification'
 import { finance } from '../utils/api/request/finance'
 import { useAuth } from '../app/providers/auth/useAuth'
 import { categories } from '../utils/api/request/categories'
+import { history } from '../utils/api/request/history'
 
 export const Income = () => {
 	const { session } = useAuth()
 	const [categoriesList, setCategoriesList] = useState([])
 	const [incomeHistory, setIncomeHistory] = useState([])
+	const [changeHistory, setChangeHistory] = useState(false)
 
 	useEffect(() => {
-		async function fetchData() {
+		async function fetchCategories() {
 			try {
 				const { data } = await categories({ config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
 				setCategoriesList(data)
@@ -20,8 +22,24 @@ export const Income = () => {
 				console.log(error.message)
 			}
 		}
-		fetchData()
-	}, [categoriesList, session.accessToken])
+
+		fetchCategories()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [categoriesList])
+
+	useEffect(() => {
+		async function fetchHistory() {
+			try {
+				const { data } = await history({ config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
+				setIncomeHistory(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		fetchHistory()
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [changeHistory])
 
 	const formik = useFormik({
 		initialValues: {
@@ -40,9 +58,9 @@ export const Income = () => {
 			return errors
 		},
 		onSubmit: async (values) => {
-			console.log(values)
 			try {
 				await finance({ data: values, config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
+				setChangeHistory(!changeHistory)
 				notifySuccess('Вы успешно добавили доход')
 			} catch (error) {
 				notifyError(error.message)
@@ -87,16 +105,18 @@ export const Income = () => {
 						<Typography sx={{ color: '#555' }}>История доходов пуста</Typography>
 					) : (
 						<Box>
-							{incomeHistory.map((item, index) => (
-								<Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }}>
-									<Typography variant='body1' sx={{ fontWeight: 'bold' }}>
-										Сумма: {item.amount} ₽
-									</Typography>
-									<Typography variant='body2' sx={{ color: '#555' }}>
-										Описание: {item.description}
-									</Typography>
-								</Box>
-							))}
+							{incomeHistory
+								.filter((item) => item.type === 'income')
+								.map((item) => (
+									<Box key={item.id} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }}>
+										<Typography variant='body1' sx={{ fontWeight: 'bold' }}>
+											Сумма: {item.incomeORexpense} ₽
+										</Typography>
+										<Typography variant='body2' sx={{ color: '#555' }}>
+											Описание: {item.description}
+										</Typography>
+									</Box>
+								))}
 						</Box>
 					)}
 				</Box>
