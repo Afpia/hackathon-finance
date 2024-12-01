@@ -61,12 +61,21 @@ class CategoriesService extends BaseService
     public function analytic($period = 'all', $limit = 7)
     {
         $topCategories = $this->financeRepository->topCategories($period, $limit);
-
         $missingCount = $limit - $topCategories->count();
 
         if ($missingCount > 0) {
             $excludeIds = $topCategories->pluck('id')->toArray();
-            $randomCategories = $this->repo->getRandomCategories($excludeIds, $missingCount);
+            $randomCategories = $this->repo->getRandomCategories($excludeIds, $missingCount);   
+
+            $randomCategories = $randomCategories->map( function ($category) {
+                return [
+                    'id' => $category->id,
+                    'category_name' => $category->category_name,
+                    'total' => 0
+                ];
+            });
+
+            
 
             $topCategories = $topCategories->concat($randomCategories);
         }
