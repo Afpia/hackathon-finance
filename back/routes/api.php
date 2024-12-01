@@ -4,7 +4,9 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\DebtsController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\GoalController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -53,3 +55,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);
 
 });
+Route::get('/goal', [GoalController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/goals', [GoalController::class, 'store'])->middleware('auth:sanctum');
+Route::patch('/goals/{id}', [GoalController::class, 'update'])->middleware('auth:sanctum');
+
+Route::post('/debts', [DebtsController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/debts', [DebtsController::class, 'index'])->middleware('auth:sanctum');

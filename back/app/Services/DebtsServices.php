@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Goal;
+use App\Models\Debts;
 use App\Repositories\DebtsRepository;
 
 class DebtsServices extends BaseService
@@ -16,14 +16,6 @@ class DebtsServices extends BaseService
 
     public function getId($userId)
     {
-        return Goal::where('user_id', $userId)->get();
-    }
-
-    public function update($id, array $data)
-    {
-        $DebtsRecord = Goal::find($id);
-        if ($DebtsRecord) {
-            $DebtsRecord->update($data);
-        }
+        return Debts::where('user_id', $userId)->get();
     }
 }
