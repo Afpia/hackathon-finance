@@ -18,4 +18,21 @@ class DebtsServices extends BaseService
     {
         return Debts::where('user_id', $userId)->get();
     }
+
+    public function destroy($id)
+    {
+    $financeRecord = Debts::find($id);
+    
+      if ($financeRecord) {
+          $financeRecord->delete();
+      }
+    }
+    public function update($id, array $data)
+    {
+    $financeRecord = Debts::find($id);
+    
+      if ($financeRecord) {
+          $financeRecord->update($data);
+      }
+    }
 }

@@ -1,13 +1,12 @@
 import { Button, Typography, Box, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
-import { notifyError, notifySuccess } from '../utils/helpers/notification'
-import { finance } from '../utils/api/request/finance'
 import { useAuth } from '../app/providers/auth/useAuth'
 import { categories } from '../utils/api/request/categories'
-import { history } from '../utils/api/request/history'
+import { notifyError, notifySuccess } from '../utils/helpers/notification'
+import { useFormik } from 'formik'
+import { finance } from '../utils/api/request/finance'
 
-export const Income = () => {
+export const Expanse = () => {
 	const { session } = useAuth()
 	const [categoriesList, setCategoriesList] = useState([])
 	const [incomeHistory, setIncomeHistory] = useState([])
@@ -48,7 +47,7 @@ export const Income = () => {
 			incomeORexpense: 0,
 			description: '',
 			category_id: 1,
-			type: 'income'
+			type: 'expense'
 		},
 		validate: (values) => {
 			const errors = {}
@@ -66,7 +65,7 @@ export const Income = () => {
 					config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } }
 				})
 				setIncomeHistory(data.finance)
-				notifySuccess('Вы успешно добавили доход')
+				notifySuccess('Вы успешно добавили расход')
 			} catch (error) {
 				notifyError(error.message)
 				formik.setErrors({ email: true, password: true })
@@ -85,7 +84,7 @@ export const Income = () => {
 					textAlign: 'center'
 				}}
 			>
-				Доходы
+				Расходы
 			</Typography>
 
 			<Typography
@@ -97,20 +96,20 @@ export const Income = () => {
 					fontWeight: 'normal'
 				}}
 			>
-				Добавьте ваш доход и просмотрите общую сумму.
+				Добавьте ваш расход и просмотрите общую сумму.
 			</Typography>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 20 }}>
 				<Box>
 					<Typography variant='h6' sx={{ color: '#4A90E2', fontWeight: 'bold', marginBottom: 2 }}>
-						История доходов
+						История расходов
 					</Typography>
 
 					{loading && <Typography sx={{ color: '#555' }}>Загрузка...</Typography>}
 					{incomeHistory.length > 0 && !loading && (
 						<Box>
 							{incomeHistory
-								?.filter((item) => item.type === 'income')
+								?.filter((item) => item.type === 'expense')
 								?.map((item, index) => (
 									<Box key={index} sx={{ padding: 2, border: '1px solid #ddd', borderRadius: 2, marginBottom: 2 }}>
 										<Typography variant='body1' sx={{ fontWeight: 'bold' }}>
@@ -140,7 +139,7 @@ export const Income = () => {
 					}}
 				>
 					<Typography variant='h6' gutterBottom sx={{ color: '#4A90E2', fontWeight: 'bold' }}>
-						Добавить доход
+						Добавить расход
 					</Typography>
 					<form onSubmit={formik.handleSubmit}>
 						<TextField
@@ -189,15 +188,15 @@ export const Income = () => {
 										{item.category_name}
 									</MenuItem>
 								))}
+								{formik.touched.category_id && formik.errors.category_id ? (
+									<span style={{ color: 'red', fontSize: '13px', marginLeft: '14px', fontWeight: '400' }}>
+										{formik.errors.category_id}
+									</span>
+								) : null}
 							</Select>
-							{formik.touched.category_id && formik.errors.category_id ? (
-								<span style={{ color: 'red', fontSize: '13px', marginLeft: '14px', fontWeight: '400' }}>
-									{formik.errors.category_id}
-								</span>
-							) : null}
 						</FormControl>
-						<Button variant='contained' type='submit' sx={{ width: '100%', marginBottom: 2, padding: '12px' }}>
-							Добавить доход
+						<Button variant='contained' type='submit' sx={{ width: '100%', padding: '12px', marginBottom: 2 }}>
+							Добавить расход
 						</Button>
 					</form>
 				</Box>

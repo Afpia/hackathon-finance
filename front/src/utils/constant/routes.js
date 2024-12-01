@@ -3,5 +3,5 @@ export const ROUTES = {
 	LOGIN: '/login',
 	SIGNUP: '/signup',
 	INCOME: '/income',
-	EXPANCE: '/expance'
+	EXPANSE: '/expanse'
 }
