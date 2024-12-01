@@ -24,9 +24,9 @@ class FinanceService extends BaseService
         ];
     }
 
-    public function getid($userId)
+    public function getid()
     {
-        return Finance::where('user_id', $userId)->get();
+        return $this->repo->getUserOperations();
     }
 
     public function destroy($id)

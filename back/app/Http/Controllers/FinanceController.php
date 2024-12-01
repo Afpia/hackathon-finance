@@ -7,6 +7,7 @@ use App\Services\CategoriesService;
 use App\Services\FinanceService;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
@@ -20,7 +21,8 @@ class FinanceController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $financeData = $this->financeService->getid($user->id);
+
+        $financeData = $this->financeService->getid();
 
         return response()->json(['finance' => $financeData]);
     }
@@ -28,9 +30,11 @@ class FinanceController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        $financeData = $this->financeService->getid($user->id);
+        $category = DB::table('categories')->where('id', $id)->get('category_name');
+        $financeData = $this->financeService->getid();
 
-        return response()->json(['finance' => $financeData->find($id)]);
+        return response()->json(['finance' => $financeData->find($id), $category]);
+
     }
 
     public function store(Request $request, CategoriesService $categoryService)
@@ -50,7 +54,7 @@ class FinanceController extends Controller
 
         $this->financeService->create($validate);
 
-        return response()->json('success', 201);
+        return $this->index();
     }
 
     public function update(Request $request, $id)

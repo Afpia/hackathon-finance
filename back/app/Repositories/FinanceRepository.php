@@ -36,6 +36,26 @@ class FinanceRepository extends BaseRepository
         }
     }
 
+    public function getUserOperations()
+    {
+        $operations = $this->model
+            ->where('user_id', Auth::id())
+            ->with('category')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return $operations->map(function ($operation) {
+            return [
+                'id' => $operation->id,
+                'incomeORexpense' => $operation->incomeORexpense,
+                'type' => $operation->type,
+                'description' => $operation->description,
+                'category_name' => $operation->category->category_name ?? 'Не указано',
+                'created_at' => $operation->created_at,
+            ];
+        });
+    }
+
     public function TotalIncome($period = 'all')
     {
         $query = $this->model

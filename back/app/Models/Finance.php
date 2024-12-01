@@ -21,4 +21,9 @@ class Finance extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }
