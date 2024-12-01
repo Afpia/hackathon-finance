@@ -40,10 +40,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/finance', [FinanceController::class, 'store']);
     Route::put('/finance/{id}', [FinanceController::class, 'update']);
     Route::delete('/finance/{id}', [FinanceController::class, 'destroy']);
+    Route::get('/finance/analytic/year', [FinanceController::class, 'yearlyAnalytics']);
 
     Route::get('/analytics', [AnalyticsController::class, 'index']);
 
     Route::get('/categories', [CategoriesController::class, 'index']);
+    Route::get('/categories/analytic', [CategoriesController::class, 'analytic']);
+
+    Route::get('/categories/{id}', [CategoriesController::class, 'show']);
 
     //Route::get('/finance/statistics/{id}', [FinanceController::class, 'statistics']); //python
     //Route::get('/finance/category', [FinanceController::class, 'expenseORincome']);

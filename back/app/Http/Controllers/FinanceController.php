@@ -42,7 +42,7 @@ class FinanceController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        if (empty($validate['category_id']) && !empty($validate['description'])) {
+        if (empty($validate['category_id']) && ! empty($validate['description'])) {
             $validate['category_id'] = $categoryService->classifyTransaction($validate['description']);
         }
 
@@ -80,5 +80,12 @@ class FinanceController extends Controller
         $this->financeService->destroy($id);
 
         return response()->json(['message' => 'Record deleted successfully']);
+    }
+
+    public function yearlyAnalytics(Request $request)
+    {
+        $year = $request->query('year', now()->year);
+
+        return response()->json($this->financeService->getYearlyAnalytics($year));
     }
 }

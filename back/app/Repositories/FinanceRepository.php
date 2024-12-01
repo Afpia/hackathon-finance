@@ -58,18 +58,22 @@ class FinanceRepository extends BaseRepository
         return $query->sum('incomeORexpense');
     }
 
-    public function TopCategories($period = 'all')
+    public function topCategories($period = 'all', $limit = 7)
     {
         $query = $this->model
-            ->select('categories.category_name', DB::raw('SUM(finances.incomeORexpense) as total'))
+            ->select(
+                'categories.category_name',
+                'categories.id',
+                DB::raw('SUM(finances.incomeORexpense) as total')
+            )
             ->join('categories', 'finances.category_id', '=', 'categories.id')
             ->where('finances.user_id', Auth::id())
-            ->groupBy('categories.category_name')
+            ->groupBy('categories.category_name', 'categories.id')
             ->orderByDesc('total');
 
         $query = $this->applyPeriodFilter($query, $period);
 
-        return $query->take(3)->get();
+        return $query->take($limit)->get();
     }
 
     public function LargestExpense($period = 'all')
@@ -81,5 +85,22 @@ class FinanceRepository extends BaseRepository
         $query = $this->applyPeriodFilter($query, $period);
 
         return $query->orderByDesc('incomeORexpense')->first();
+    }
+
+    public function getMonthlySummary($year = null)
+    {
+        $year = $year ?? now()->year;
+
+        return $this->model
+            ->select(
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('SUM(CASE WHEN type = "income" THEN incomeORexpense ELSE 0 END) as total_income'),
+                DB::raw('SUM(CASE WHEN type = "expence" THEN incomeORexpense ELSE 0 END) as total_expense')
+            )
+            ->where('user_id', Auth::id())
+            ->whereYear('created_at', $year)
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->get();
     }
 }

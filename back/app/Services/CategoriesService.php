@@ -3,10 +3,13 @@
 namespace App\Services;
 
 use App\Repositories\CategoriesRepository;
+use App\Repositories\FinanceRepository;
 
 class CategoriesService extends BaseService
 {
     private $categoriesRepository;
+
+    private $financeRepository;
 
     private $categoriesKeywords = [
         1 => ['магазин', 'супермаркет', 'кафе', 'ресторан', 'еда', 'напитки'],
@@ -31,9 +34,10 @@ class CategoriesService extends BaseService
         20 => ['другое', 'разное', 'неопознанное'],
     ];
 
-    public function __construct(CategoriesRepository $categoriesRepository)
+    public function __construct(CategoriesRepository $categoriesRepository, FinanceRepository $financeRepository)
     {
         $this->repo = $categoriesRepository;
+        $this->financeRepository = $financeRepository;
     }
 
     public function classifyTransaction($description)
@@ -52,5 +56,21 @@ class CategoriesService extends BaseService
         return ! empty($matchedCategories)
             ? array_keys($matchedCategories, max($matchedCategories))[0]
             : 20;
+    }
+
+    public function analytic($period = 'all', $limit = 7)
+    {
+        $topCategories = $this->financeRepository->topCategories($period, $limit);
+
+        $missingCount = $limit - $topCategories->count();
+
+        if ($missingCount > 0) {
+            $excludeIds = $topCategories->pluck('id')->toArray();
+            $randomCategories = $this->repo->getRandomCategories($excludeIds, $missingCount);
+
+            $topCategories = $topCategories->concat($randomCategories);
+        }
+
+        return $topCategories;
     }
 }

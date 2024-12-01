@@ -18,11 +18,11 @@ return new class extends Migration
         });
 
         DB::table('categories')->insert([
-                ['category_name' => 'Прочее'],
-                ['category_name' => 'Еда и напитки'],
-                ['category_name' => 'Транспорт'],
-                ['category_name' => 'Жильё'],
-                ['category_name' => 'Развлечения'],
+            ['category_name' => 'Прочее'],
+            ['category_name' => 'Еда и напитки'],
+            ['category_name' => 'Транспорт'],
+            ['category_name' => 'Жильё'],
+            ['category_name' => 'Развлечения'],
             ['category_name' => 'Финансы'],
             ['category_name' => 'Подарки'],
             ['category_name' => 'Здоровье'],
@@ -38,7 +38,7 @@ return new class extends Migration
             ['category_name' => 'Благотворительность'],
             ['category_name' => 'Домашние животные'],
             ['category_name' => 'Мобильная связь и интернет'],
-            
+
         ]);
     }
 

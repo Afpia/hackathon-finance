@@ -46,4 +46,20 @@ class FinanceService extends BaseService
             $financeRecord->update($data);
         }
     }
+
+    public function getYearlyAnalytics($year = null)
+    {
+        $data = $this->repo->getMonthlySummary($year);
+
+        $result = array_fill(1, 12, ['total_income' => 0, 'total_expense' => 0]);
+
+        foreach ($data as $row) {
+            $result[$row->month] = [
+                'total_income' => $row->total_income,
+                'total_expense' => $row->total_expense,
+            ];
+        }
+
+        return $result;
+    }
 }
