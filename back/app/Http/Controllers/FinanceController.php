@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Finance;
 use App\Services\CategoriesService;
 use App\Services\FinanceService;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

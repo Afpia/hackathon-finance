@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Finance;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class FinanceRepository extends BaseRepository
 {
