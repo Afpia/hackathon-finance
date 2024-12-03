@@ -1,8 +1,151 @@
 import { Box, Typography } from '@mui/material'
 import { LineChart } from '../components/line-chart'
 import { BarChart } from '../components/bar-chart'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../app/providers/auth/useAuth'
+import { stats } from '../utils/api/request/stats'
+import { statsLine } from '../utils/api/request/statsLine'
 
 export const Home = () => {
+	const [dataBarList, setDataBarList] = useState({})
+	const [dataLineList, setDataLineList] = useState([])
+
+	const { session } = useAuth()
+	console.log(dataBarList)
+	useEffect(() => {
+		async function fetchBar() {
+			try {
+				const { data } = await stats({ config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
+				setDataLineList(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		async function fetchLine() {
+			try {
+				const { data } = await statsLine({ config: { headers: { Authorization: 'Bearer ' + `${session.accessToken}` } } })
+				setDataBarList(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		fetchBar()
+		fetchLine()
+	}, [session.accessToken])
+
+	const dataLine = {
+		labels: ['Декабрь', 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь'],
+		datasets: [
+			{
+				label: 'Все расходы по месяцам',
+				data: [
+					dataLineList['12']?.total_income,
+					dataLineList['1']?.total_income,
+					dataLineList['2']?.total_income,
+					dataLineList['3']?.total_income,
+					dataLineList['4']?.total_income,
+					dataLineList['5']?.total_income,
+					dataLineList['6']?.total_income,
+					dataLineList['7']?.total_income,
+					dataLineList['8']?.total_income,
+					dataLineList['9']?.total_income,
+					dataLineList['10']?.total_income,
+					dataLineList['11']?.total_income
+				],
+				fill: false,
+				borderColor: 'rgb(75, 192, 192)',
+				tension: 0.1
+			},
+			{
+				label: 'Все доходы по месяцам',
+				data: [
+					dataLineList['12']?.total_expance,
+					dataLineList['1']?.total_expance,
+					dataLineList['2']?.total_expance,
+					dataLineList['3']?.total_expance,
+					dataLineList['4']?.total_expance,
+					dataLineList['5']?.total_expance,
+					dataLineList['6']?.total_expance,
+					dataLineList['7']?.total_expance,
+					dataLineList['8']?.total_expance,
+					dataLineList['9']?.total_expance,
+					dataLineList['10']?.total_expance,
+					dataLineList['11']?.total_expance
+				],
+				fill: false,
+				borderColor: '#d8b4fe',
+				tension: 0.1
+			}
+		]
+	}
+
+	const data = {
+		labels: [
+			dataBarList[0].category_name,
+			dataBarList[1].category_name,
+			dataBarList[2].category_name,
+			dataBarList[3].category_name,
+			dataBarList[4].category_name,
+			dataBarList[5].category_name,
+			dataBarList[6].category_name
+		],
+		datasets: [
+			{
+				label: 'Популярное по категориям',
+				data: [
+					dataBarList[0]?.total,
+					dataBarList[1]?.total,
+					dataBarList[2]?.total,
+					dataBarList[3]?.total,
+					dataBarList[4]?.total,
+					dataBarList[5]?.total,
+					dataBarList[6]?.total
+				],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(255, 159, 64, 0.2)',
+					'rgba(255, 205, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(201, 203, 207, 0.2)'
+				],
+				borderColor: [
+					'rgb(255, 99, 132)',
+					'rgb(255, 159, 64)',
+					'rgb(255, 205, 86)',
+					'rgb(75, 192, 192)',
+					'rgb(54, 162, 235)',
+					'rgb(153, 102, 255)',
+					'rgb(201, 203, 207)'
+				],
+				borderWidth: 1
+			}
+			// {
+			// 	label: 'Топ доходы по категориям',
+			// 	data: [65, 59, 80, 81, 56, 55, 40],
+			// 	backgroundColor: [
+			// 		'rgba(201, 203, 207, 0.2)',
+			// 		'rgba(153, 102, 255, 0.2)',
+			// 		'rgba(54, 162, 235, 0.2)',
+			// 		'rgba(75, 192, 192, 0.2)',
+			// 		'rgba(255, 205, 86, 0.2)',
+			// 		'rgba(255, 159, 64, 0.2)',
+			// 		'rgba(255, 99, 132, 0.2)'
+			// 	],
+			// 	borderColor: [
+			// 		'rgb(201, 203, 207)',
+			// 		'rgb(153, 102, 255)',
+			// 		'rgb(54, 162, 235)',
+			// 		'rgb(75, 192, 192)',
+			// 		'rgb(255, 205, 86)',
+			// 		'rgb(255, 159, 64)',
+			// 		'rgb(255, 99, 132)'
+			// 	],
+			// 	borderWidth: 1
+			// }
+		]
+	}
 	return (
 		<>
 			<Typography variant='h4' gutterBottom sx={{ fontWeight: 'bold', color: '#4A90E2', textAlign: 'center', marginBottom: 10 }}>
@@ -10,10 +153,10 @@ export const Home = () => {
 			</Typography>
 			<Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
 				<Box sx={{ width: '50%' }}>
-					<LineChart />
+					<LineChart data={dataLine} />
 				</Box>
 				<Box sx={{ width: '50%' }}>
-					<BarChart />
+					<BarChart data={data} />
 				</Box>
 			</Box>
 

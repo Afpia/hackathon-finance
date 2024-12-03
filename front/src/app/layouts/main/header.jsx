@@ -29,7 +29,7 @@ export const Header = () => {
 		>
 			<Box sx={{ display: 'flex', justifyContent: 'center', gap: 3 }}>
 				<Link to={ROUTES.MAIN}>
-					<Button variant='text'>Бюджет</Button>
+					<Button variant='text'>Главная</Button>
 				</Link>
 				<Link to={ROUTES.INCOME}>
 					<Button variant='text'>Добавить доход</Button>
